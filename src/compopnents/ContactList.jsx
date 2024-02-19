@@ -1,5 +1,7 @@
 import { useState } from "react";
+import { useEffect } from "react";
 import ContactRow from "./ContactRow";
+import SelectedContact from "./SelectedContact";
 
 const dummyContacts = [
   { id: 1, name: "R2-D2", phone: "222-222-2222", email: "r2d2@droids.com" },
@@ -7,9 +9,22 @@ const dummyContacts = [
   { id: 3, name: "BB-8", phone: "888-888-8888", email: "bb8@droids.com" },
 ];
 
-export default function ContactList() {
+export default function ContactList({ setSelectedContactId }) {
 const [contacts, setContacts] = useState(dummyContacts)
-console.log("Contacts: ", contacts)
+
+useEffect(() =>{
+  async function fetchContacts() {
+    try {
+      const response = await fetch("https://jsonplaceholder.typicode.com/users");
+      const data = await response.json();
+      setContacts(data);
+      console.log(contacts)
+    } catch (error) {
+      console.error(error);
+    }
+  }
+  fetchContacts()
+},[])
 
   return (
     <table>
